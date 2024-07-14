@@ -3,6 +3,8 @@ from fastapi import FastAPI, HTTPException
 from transformers import AutoTokenizer, AutoModel
 import torch
 import pinecone
+import os
+
 from dotenv import load_dotenv
 load_dotenv()
 
