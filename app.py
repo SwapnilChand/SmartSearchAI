@@ -3,12 +3,18 @@ from fastapi import FastAPI, HTTPException
 from transformers import AutoTokenizer, AutoModel
 import torch
 import pinecone
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI()
 
 # Initialize Pinecone
-pinecone.init(api_key='your-api-key', environment='us-west1-gcp')
-index = pinecone.Index('example-index')
+pinecone.init(api_key=os.getenv('PINECONE_API_KEY'), environment='us-west1-gcp')
+
+index_name = 'example-index'
+if index_name not in pinecone.list_indexes():
+    pinecone.create_index(index_name, dimension=768)
+index = pinecone.Index(index_name)
 
 # Load the tokenizer and model
 tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
